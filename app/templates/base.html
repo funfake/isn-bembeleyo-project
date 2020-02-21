@@ -1,0 +1,38 @@
+<!doctype html>
+
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  {% if title %}
+    <title>{{ title }} - Bembeleyo</title>
+  {% else %}
+    <title>Bienvenue ! - Bembeleyo</title>
+  {% endif %}
+  
+  <meta name="description" content="Site pour se rencontrer entre dates de naissances">
+  <meta name="author" content="Baptiste et William">
+
+  <link rel="stylesheet" href="../static/css/style.css?v=1.0">
+
+</head>
+
+<body>
+    <!-- insert here text -->
+    <h1>Bembeleyo</h1> 
+
+		<a href="messages.html">Contact</a>
+		<a href="send_message.html">Connaissances du jour</a>
+		<a href="liste_compte.html">Contacter + de personnes</a>
+		<a href="decouverte.html">Découvrir des villes</a>
+		<a href="parametre.html">Paramètres</a>
+
+    <hr>
+
+    {% block content %}{% endblock %}
+		
+		
+  <script src="js/scripts.js"></script>
+</body>
+
+</html>

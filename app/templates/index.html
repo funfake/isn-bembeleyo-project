@@ -1,32 +1,9 @@
-<!doctype html>
+{% extends "base.html" %}
 
-<html lang="fr">
+{% block content %}
+    <h2>Bonjour, {{ user.username }}!</h2>
 
-<head>
-  <meta charset="utf-8">
-
-  <title>{{ title }} - Bembeleyo</title>
-  <meta name="description" content="Site pour se rencontrer entre dates de naissances">
-  <meta name="author" content="Baptiste et William">
-
-  <link rel="stylesheet" href="../static/css/style.css?v=1.0">
-
-</head>
-
-<body>
-    <!-- insert here text -->
-    <h1>Bembeleyo</h1> 
-    <h2>Bonjour, {{ user }}</h2>
-		<a href="messages.html">Contact</a>
-		<a href="send_message.html">Connaissance du jour</a>
-		<a href="liste_compte.html">Contacter plus de personnes</a>
-		<a href="decouverte.html">Decouvre des villes</a>
-		<a href="parametre.html">Parametre</a>
-
-    <img src="photo nuage.jfif" alt="" height="300px" width="300px" />
-		
-		
-  <script src="js/scripts.js"></script>
-</body>
-
-</html>
+    {% for post in posts %}
+    <div><p>{{ post.author.username }} dit: <b>{{ post.body }}</b></p></div>
+    {% endfor %}
+{% endblock %}
