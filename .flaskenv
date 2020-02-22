@@ -1,3 +1,4 @@
 FLASK_APP=bembeleyo.py
 FLASK_DEBUG=1
 FLASK_ENV=development
+SECRET_KEY=5t96P5MiONQYnIVpf4Un2CjXn3joevA_

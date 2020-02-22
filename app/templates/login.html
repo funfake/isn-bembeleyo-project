@@ -1,24 +1,33 @@
-<!doctype html>
+{% extends "base.html" %}
 
-<html lang="fr">
+{% block content %}
 
-<head>
-  <meta charset="utf-8">
+    {% if session['logged_in'] %} 
 
-  <title>Se connecter - Bembeleyo</title>
-  <meta name="description" content="Site pour se rencontrer entre dates de naissances">
-  <meta name="author" content="Baptiste et William">
+    Vous êtes déjà connecté !
 
-  <link rel="stylesheet" href="../static/css/style.css?v=1.0">
+    {% else %}
 
-</head>
+    <h2>Se connecter</h2>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(size=32) }}<br>
+            {% for error in form.username.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}<br>
+            {% for error in form.password.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <p>{{ form.submit() }}</p>
+    </form>
 
-<body>
-    <!-- insert here text -->
-    <h1>Incscrivez-vous!</h1>
-    
-
-  <script src="js/scripts.js"></script>
-</body>
-
-</html>
+    {% endif %}
+{% endblock %}
