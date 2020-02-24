@@ -8,13 +8,13 @@ class User:
         self.email = email
         self.password = password
         
-    @property
-    def email(self):
-        return self.email
+    # @property
+    # def email(self):
+    #     return self.email
     
     @property
     def fullname(self):
         return '{} {}'.format(self.first_name, self.last_name)
     
     def __repr__(self):
-        return "User('{}', '{}', '{}')".format(self.first_name, self.last_name, self.email)
+        return "User('{}', '{}', '{}', '{}', '{}', '{}')".format(self.first_name, self.last_name, self.username, self.birthdate, self.email, self.password)

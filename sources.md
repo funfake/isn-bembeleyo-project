@@ -17,3 +17,8 @@
 
 ## databases and python
 - sqlite db with python introduction video : https://www.youtube.com/watch?v=pd-0G0MigUA
+- prog orientée objet + sql requests == tuples ! :  https://www.w3schools.com/python/trypython.asp?filename=demo_tuple1
+- add primary keys : https://www.tutorialspoint.com/sqlite/sqlite_primary_key.htm (ne marche pas)
+- champ unique pour l'adresse mail et le nom d'utilisateur : https://www.sqlitetutorial.net/sqlite-unique-constraint/
+- afficher les erreurs liées à la requête : https://www.programcreek.com/python/example/6844/sqlite3.Error
+- 
