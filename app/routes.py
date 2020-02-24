@@ -1,10 +1,21 @@
 from flask import render_template, flash, redirect, url_for, request, session, abort
 from app import app
-from app.forms import LoginForm
+from app.forms import LoginForm, RegistrationForm
+from app.models import User
+import sqlite3
 
 @app.route('/')
 @app.route('/index')
 def index():
+    # DB connection
+    db = sqlite3.connect('database.db') # creates the db instance
+    cursor = db.cursor() # curseur pour se ballader dans la db
+    # cursor.execute("INSERT INTO users VALUES ('Baptiste', 'Dumy', 'baptiste', '16042002', 'contact@baptiste.fr', 'dummy')")
+    # cursor.execute("SELECT * FROM users WHERE first_name='William'")
+    # print(cursor.fetchone()) # opposed to fetchmany(max5) or fetchall()
+    db.commit() # saving to database
+    db.close() # Ferme la connexion après utilisation
+    
     if not session.get('logged_in'):
         user = {'username': 'bel.lle inconnu.e'} # user en POO, valeur par défaut si pas connecté pour pas tout faire crasher
     else:
@@ -43,3 +54,16 @@ def logout():
     session['logged_in'] = False # on met le statut "connecté à Faux"
     session.pop('username', None) # on enlève le nom d'utilisateur stocké en session
     return redirect(url_for('index')) # on redirige
+
+
+@app.route('/register', methods=['GET', 'POST']) # compliqué pour faire marcher le système de "déjà connecté, obligé de le faire sur le traitement de la page en jinja"
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit(): # le form est valide
+        #if request.form['password'] == 'password' and request.form['username'] == 'admin': # verif que le mot de passe est le bon
+        session['logged_in'] = True # la session est marquée comme connectée 
+        session['username'] = request.form['username'] # on stocke la variable utilisateur dans la session
+        flash('Demande de connexion {}, remember_me={}'.format(
+            form.username.data, form.remember_me.data))  # on affiche la demande de connexion
+        return redirect(url_for('index')) # puis on redirige
+    return render_template('register.html', title='S\'inscrire', form=form) # si pas de formulaire envoyé, on l'affiche

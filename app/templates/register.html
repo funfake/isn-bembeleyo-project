@@ -1,23 +1,100 @@
-<!doctype html>
+{% extends "base.html" %}
 
-<html lang="fr">
+{% block content %}
 
-<head>
-  <meta charset="utf-8">
+    {% if session['logged_in'] %} 
 
-  <title>Bembeleyo</title>
-  <meta name="description" content="Site pour se rencontrer entre dates de naissances">
-  <meta name="author" content="Baptiste et William">
+    Vous êtes déjà connecté !
 
-  <link rel="stylesheet" href="../static/css/style.css?v=1.0">
+    {% else %}
 
-</head>
+    <h2>S'inscrire</h2>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.first_name.label }}<br>
+            {{ form.first_name(size=32) }}<br>
+            {% for error in form.first_name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.last_name.label }}<br>
+            {{ form.last_name(size=32) }}<br>
+            {% for error in form.last_name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(size=32) }}<br>
+            {% for error in form.username.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.birthdate.label }}<br>
+            {{ form.birthdate(size=32, id="flatdatepicker") }}<br>
+            {% for error in form.birthdate.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.email.label }}<br>
+            {{ form.email(size=32) }}<br>
+            {% for error in form.email.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}<br>
+            {% for error in form.password.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password2.label }}<br>
+            {{ form.password2(size=32) }}<br>
+            {% for error in form.password2.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
 
-<body>
-    <!-- insert here text -->
-    <h1>Hello there !</h1>
+    {% endif %}
+{% endblock %}
 
-  <script src="js/scripts.js"></script>
-</body>
+{% block scripts %}
+  {{ super() }}
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script type="text/javascript">
+    $(function () {
+      // flatpickr('selector', options);
+      flatpickr('#flatdatepicker',{
+        // A string of characters which are used to define how the date will be displayed in the input box. 
+        dateFormat: 'd/m/Y',
+        // The minimum date that a user can start picking from, as a JavaScript Date.
+        minDate: null,
 
-</html>
+        // The maximum date that a user can pick to, as a JavaScript Date. 
+        maxDate: null,
+
+        // Set disableMobile to true to always use the non-native picker.
+        // By default, flatpickr utilizes native datetime widgets unless certain options (e.g. disable) are used.
+        disableMobile: false,
+
+        // Enables time picker
+        enableTime: false, 
+
+        // Displays the calendar inline
+        inline: false,
+
+        // "single"  "single", "multiple", or "range"
+        mode: "single",
+        
+      });
+    });
+  </script>
+{% endblock %}
