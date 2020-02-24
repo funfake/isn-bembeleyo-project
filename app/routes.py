@@ -3,6 +3,19 @@ from app import app
 from app.forms import LoginForm, RegistrationForm
 from app.models import User
 import sqlite3
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(
+        schemes=["pbkdf2_sha256"],
+        default="pbkdf2_sha256",
+        pbkdf2_sha256__default_rounds=30000
+)
+
+def encrypt_password(password):
+    return pwd_context.encrypt(password)
+
+def check_encrypted_password(password, hashed):
+    return pwd_context.verify(password, hashed)
 
 def insert_user(user):
     try:
@@ -88,18 +101,20 @@ def login():
         # try:
         username = request.form['username']
         sel_user = User(get_user_by_username(username)[0], get_user_by_username(username)[1], get_user_by_username(username)[2], get_user_by_username(username)[3], get_user_by_username(username)[4], get_user_by_username(username)[5],)
-        print(request.form['password'])
-        print(sel_user)
-        if request.form['password'] == sel_user.password: # verif que le mot de passe est le bon
-            session['logged_in'] = True # la session est marquée comme connectée 
-            session['username'] = request.form['username'] # on stocke la variable utilisateur dans la session
-            flash('Demande de connexion {}, remember_me={}'.format(
-                form.username.data, form.remember_me.data))  # on affiche la demande de connexion
-            return redirect(url_for('index')) # puis on redirige
-        else:
-            flash('Mauvais mot de passe') # le mot de passe n'est pas bon
+        password_to_check = request.form['password']
+        try: # if hash is not recognized it gives an error
+            if check_encrypted_password(password_to_check, sel_user.password): # password à vérifier, password déjà hashé :: return True or False
+                session['logged_in'] = True # la session est marquée comme connectée 
+                session['username'] = request.form['username'] # on stocke la variable utilisateur dans la session
+                flash('Demande de connexion {}, remember_me={}'.format(
+                    form.username.data, form.remember_me.data))  # on affiche la demande de connexion
+                return redirect(url_for('index')) # puis on redirige
+            else:
+                flash('Mauvais mot de passe') # le mot de passe n'est pas bon
+                return redirect(url_for('login')) # on redirige de nouveau vers la page de connexion
+        except:
+            flash('Erreur') # le hash n'a pas éte reconnu ou la procédure n'a pas marché
             return redirect(url_for('login')) # on redirige de nouveau vers la page de connexion
-        # except:
         flash('Utilisateur inconnu') # le mot de passe n'est pas bon
         return redirect(url_for('login')) # on redirige de nouveau vers la page de connexion
     return render_template('login.html', title='Se connecter', form=form) # si pas de formulaire envoyé, on l'affiche
@@ -121,7 +136,10 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit(): # le form est valide
         #if request.form['password'] == 'password' and request.form['username'] == 'admin': # verif que le mot de passe est le bon
-        form_user = User(request.form['first_name'], request.form['last_name'], request.form['username'], request.form['birthdate'], request.form['email'], request.form['password'])
+        password = request.form['password'] # on récupère le mot de passe du form pour le traiter
+        hashed = encrypt_password(password) # on l'encrypte avec la fonction ci-dessus
+        # bcrypt.check_password_hash(pw_hash, 'hunter2') # returns True
+        form_user = User(request.form['first_name'], request.form['last_name'], request.form['username'], request.form['birthdate'], request.form['email'], hashed)
         
         if insert_user(form_user) == True:
             session['logged_in'] = True # la session est marquée comme connectée 
