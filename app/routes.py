@@ -4,69 +4,7 @@ from app.forms import LoginForm, RegistrationForm
 from app.models import User
 import sqlite3
 from passlib.context import CryptContext
-
-pwd_context = CryptContext(
-        schemes=["pbkdf2_sha256"],
-        default="pbkdf2_sha256",
-        pbkdf2_sha256__default_rounds=30000
-)
-
-def encrypt_password(password):
-    return pwd_context.encrypt(password)
-
-def check_encrypted_password(password, hashed):
-    return pwd_context.verify(password, hashed)
-
-def insert_user(user):
-    try:
-        db = sqlite3.connect('database.db') # creates the db instance
-        c = db.cursor() # curseur pour se ballader dans la db
-        c.execute("INSERT INTO users VALUES (:first_name, :last_name, :username, :birthdate, :email, :password)", {'first_name': user.first_name, 'last_name': user.last_name, 'username': user.username, 'birthdate': user.birthdate, 'email': user.email, 'password': user.password})
-        db.commit() # saving to database
-        db.close() # Ferme la connexion après utilisation
-        return True
-    except sqlite3.Error as e:
-        error = type(e).__name__
-        if error == "IntegrityError":
-            flash("Le nom d'utilisateur entré ou l'adresse email sont déjà utilisés") 
-        else:
-            flash(error) 
-            
-def get_user_by_username(username):
-    try:
-        db = sqlite3.connect('database.db') # creates the db instance
-        c = db.cursor() # curseur pour se ballader dans la db
-        c.execute("SELECT * FROM users WHERE username=:username", {'username': username})
-        # db.close() # Ferme la connexion après utilisation
-        return c.fetchone() # returns a tuple
-    except sqlite3.Error as e:
-        error = type(e).__name__
-        flash(error) 
-
-def update_username(user, new_username):
-    try:
-        db = sqlite3.connect('database.db') # creates the db instance
-        c = db.cursor() # curseur pour se ballader dans la db
-        c.execute("UPDATE users SET username = :new_username WHERE username=:username AND email=:email", {'username': user.username, 'email': user.email, 'new_username': new_username})
-        db.commit() # saving to database
-        db.close() # Ferme la connexion après utilisation
-    except sqlite3.Error as e:
-        error = type(e).__name__
-        if error == "IntegrityError":
-            flash("Le nom d'utilisateur entré est déjà utilisé") 
-        else:
-            flash(error) 
-
-def remove_user(user):
-    try:
-        db = sqlite3.connect('database.db') # creates the db instance
-        c = db.cursor() # curseur pour se ballader dans la db
-        c.execute("DELETE from users WHERE username=:username AND email=:email", {'username': user.username, 'email': user.email})
-        db.commit() # saving to database
-        db.close() # Ferme la connexion après utilisation
-    except sqlite3.Error as e:
-        error = type(e).__name__
-        flash(error) 
+from app.requests import get_user_by_username, get_users_by_birthdate, insert_user, check_encrypted_password, encrypt_password, remove_user, update_username
 
 @app.route('/')
 @app.route('/index')
@@ -75,23 +13,21 @@ def index():
     # cursor.execute("INSERT INTO users VALUES ('Baptiste', 'Dumy', 'baptiste', '16042002', 'contact@baptiste.fr', 'dummy')")
     # cursor.execute("SELECT * FROM users WHERE first_name='William'")
     # print(cursor.fetchone()) # opposed to fetchmany(max5) or fetchall()
-   
     
     if not session.get('logged_in'):
         user = {'username': 'bel.lle inconnu.e'} # user en POO, valeur par défaut si pas connecté pour pas tout faire crasher
+        sel_users = None
+        logged = False
     else:
-        user = {'username': session.get('username')} # stockage de l'utilisateur en POO (objet)
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html', title='Accueil', user=user, posts=posts) # on affiche l'accueil
+        username = session.get('username') # on recupere le nom d'uttilisateur encrypté dans la session
+        user = User(get_user_by_username(username)[0], get_user_by_username(username)[1], get_user_by_username(username)[2], get_user_by_username(username)[3], get_user_by_username(username)[4], None) # on recupere cet utilisateur en tant qu'objet db
+        sel_users = get_users_by_birthdate(user.birthdate) # on recupere une liste (raw) de tous les utilisateurs avec la meme date de naissance
+        sel_users_list = [] # on initialise la liste
+        for sel_user in sel_users:
+            user = User(get_user_by_username(sel_user[2])[0], get_user_by_username(sel_user[2])[1], get_user_by_username(sel_user[2])[2], get_user_by_username(sel_user[2])[3], get_user_by_username(sel_user[2])[4], None) # on transofrme l'utilisateur issu de la liste (Raw) en objet
+            sel_users_list.append(user) # on l'ajoute a la liste
+        logged = True
+    return render_template('index.html', title='Accueil', user=user, sel_users_list=sel_users_list, logged=logged) # on affiche l'accueil
 
 
 @app.route('/login', methods=['GET', 'POST']) # compliqué pour faire marcher le système de "déjà connecté, obligé de le faire sur le traitement de la page en jinja"

@@ -2,7 +2,13 @@
 
 {% block content %}
     <h2>Bonjour, {{ user.username }}!</h2>
-    {% for post in posts %}
-    <div><p>{{ post.author.username }} dit: <b>{{ post.body }}</b></p></div>
-    {% endfor %}
+
+    {%if logged %}
+        {% for sel_user in sel_users_list %}
+            {% if sel_user != user %}
+            <div><p>{{ sel_user.username }} né le: <b>{{ sel_user.birthdate }}</b></p></div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
 {% endblock %}
