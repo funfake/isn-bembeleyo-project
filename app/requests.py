@@ -43,17 +43,17 @@ def get_user_by_username(username):
         error = type(e).__name__
         flash(error) 
 
-def update_username(user, new_username):
+def update_names(user, new_first_name, new_last_name):
     try:
         db = sqlite3.connect('database.db') # creates the db instance
         c = db.cursor() # curseur pour se ballader dans la db
-        c.execute("UPDATE users SET username = :new_username WHERE username=:username AND email=:email", {'username': user.username, 'email': user.email, 'new_username': new_username})
+        c.execute("UPDATE users SET first_name = :new_first_name, last_name = :new_last_name WHERE username=:username AND email=:email", {'username': user.username, 'email': user.email, 'new_first_name': new_first_name, 'new_last_name': new_last_name})
         db.commit() # saving to database
         db.close() # Ferme la connexion après utilisation
     except sqlite3.Error as e:
         error = type(e).__name__
         if error == "IntegrityError":
-            flash("Le nom d'utilisateur entré est déjà utilisé") 
+            flash("Une erreur s'est produite") 
         else:
             flash(error) 
 

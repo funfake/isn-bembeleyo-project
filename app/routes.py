@@ -4,7 +4,7 @@ from app.forms import LoginForm, RegistrationForm
 from app.models import User
 import sqlite3
 from passlib.context import CryptContext
-from app.requests import get_user_by_username, get_users_by_birthdate, insert_user, check_encrypted_password, encrypt_password, remove_user, update_username
+from app.requests import get_user_by_username, get_users_by_birthdate, insert_user, check_encrypted_password, encrypt_password, remove_user, update_names
 
 @app.route('/')
 @app.route('/index')
@@ -13,6 +13,7 @@ def index():
     # cursor.execute("INSERT INTO users VALUES ('Baptiste', 'Dumy', 'baptiste', '16042002', 'contact@baptiste.fr', 'dummy')")
     # cursor.execute("SELECT * FROM users WHERE first_name='William'")
     # print(cursor.fetchone()) # opposed to fetchmany(max5) or fetchall()
+    sel_users_list = [] # on initialise la liste
     
     if not session.get('logged_in'):
         user = {'username': 'bel.lle inconnu.e'} # user en POO, valeur par défaut si pas connecté pour pas tout faire crasher
@@ -22,10 +23,9 @@ def index():
         username = session.get('username') # on recupere le nom d'uttilisateur encrypté dans la session
         user = User(get_user_by_username(username)[0], get_user_by_username(username)[1], get_user_by_username(username)[2], get_user_by_username(username)[3], get_user_by_username(username)[4], None) # on recupere cet utilisateur en tant qu'objet db
         sel_users = get_users_by_birthdate(user.birthdate) # on recupere une liste (raw) de tous les utilisateurs avec la meme date de naissance
-        sel_users_list = [] # on initialise la liste
         for sel_user in sel_users:
-            user = User(get_user_by_username(sel_user[2])[0], get_user_by_username(sel_user[2])[1], get_user_by_username(sel_user[2])[2], get_user_by_username(sel_user[2])[3], get_user_by_username(sel_user[2])[4], None) # on transofrme l'utilisateur issu de la liste (Raw) en objet
-            sel_users_list.append(user) # on l'ajoute a la liste
+            new_user = User(get_user_by_username(sel_user[2])[0], get_user_by_username(sel_user[2])[1], get_user_by_username(sel_user[2])[2], get_user_by_username(sel_user[2])[3], get_user_by_username(sel_user[2])[4], None) # on transofrme l'utilisateur issu de la liste (Raw) en objet
+            sel_users_list.append(new_user) # on l'ajoute a la liste
         # tolog = False
     return render_template('index.html', title='Accueil', user=user, sel_users_list=sel_users_list) # on affiche l'accueil
 
@@ -85,3 +85,28 @@ def register():
         else:
             return redirect(url_for('register'))
     return render_template('register.html', title='S\'inscrire', form=form) # si pas de formulaire envoyé, on l'affiche
+
+
+@app.route('/settings', methods=['GET', 'POST']) # compliqué pour faire marcher le système de "déjà connecté, obligé de le faire sur le traitement de la page en jinja"
+def settings():
+    if session.get('logged_in'):
+        username = session.get('username')
+        sel_user = User(get_user_by_username(username)[0], get_user_by_username(username)[1], get_user_by_username(username)[2], get_user_by_username(username)[3], get_user_by_username(username)[4], get_user_by_username(username)[5],)
+       
+        form = RegistrationForm(obj=sel_user)
+        
+        # can modify the form with form.<NAME>.data
+        form.username.data = sel_user.username
+        form.birthdate.data = sel_user.birthdate
+        form.email.data = sel_user.email
+        form.password.data = sel_user.password
+        form.password2.data = sel_user.password
+        
+        # and validate it then
+        if request.method == 'POST' and form.validate():
+            update_names(sel_user, form.first_name.data, form.last_name.data)
+            flash('Informations mises à jour')
+                
+        return render_template('settings.html', title='Paramètres', form=form) # si pas de formulaire envoyé, on l'affiche
+    else:
+        return redirect(url_for('index'))
