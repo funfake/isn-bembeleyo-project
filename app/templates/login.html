@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+    <div class="center">
     {% if session['logged_in'] %} 
 
     Vous êtes déjà connecté !
@@ -25,9 +25,9 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
         <p>{{ form.submit() }}</p>
     </form>
 
     {% endif %}
+    </div>
 {% endblock %}

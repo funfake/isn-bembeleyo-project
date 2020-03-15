@@ -16,6 +16,20 @@ body {
 
 
 /* Content */
+
+.center {
+    text-align:center; 
+    padding:40px
+}
+
+.center input {
+    min-width: 300px;
+    min-height: 35px;
+    font-size: 17px;
+    text-align: center;
+    margin: 5px;
+}
+
 .card {
     display: inline-block;
     margin: 10px 0px 10px 0px;

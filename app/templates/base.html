@@ -28,6 +28,7 @@
     <a href="{{ url_for('index') }}">Accueil</a>
     {% if session['logged_in'] %} 
     <a href="{{ url_for('logout') }}">Se déconnecter</a>
+    <a href="{{ url_for('settings') }}">Paramètres</a>
     {% else %}
     <a href="{{ url_for('login') }}">Se connecter</a>
     <a href="{{ url_for('register') }}">S'inscrire</a>
@@ -36,7 +37,6 @@
 		<!-- <a href="send_message.html">Connaissances du jour</a> -->
 		<!-- <a href="liste_compte.html">Contacter + de personnes</a> -->
 		<!-- <a href="decouverte.html">Découvrir des villes</a> -->
-		<a href="{{ url_for('settings') }}">Paramètres</a>
 
     <hr>
 

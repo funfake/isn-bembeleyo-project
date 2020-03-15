@@ -43,11 +43,11 @@ def get_user_by_username(username):
         error = type(e).__name__
         flash(error) 
 
-def update_names(user, new_first_name, new_last_name):
+def update_names(user, new_first_name, new_last_name, new_email):
     try:
         db = sqlite3.connect('database.db') # creates the db instance
         c = db.cursor() # curseur pour se ballader dans la db
-        c.execute("UPDATE users SET first_name = :new_first_name, last_name = :new_last_name WHERE username=:username AND email=:email", {'username': user.username, 'email': user.email, 'new_first_name': new_first_name, 'new_last_name': new_last_name})
+        c.execute("UPDATE users SET first_name = :new_first_name, last_name = :new_last_name, email = :new_email WHERE username=:username", {'username': user.username, 'new_first_name': new_first_name, 'new_last_name': new_last_name, 'new_email': new_email})
         db.commit() # saving to database
         db.close() # Ferme la connexion après utilisation
     except sqlite3.Error as e:

@@ -35,3 +35,9 @@
 - type error : https://www.reddit.com/r/learnpython/comments/34vqk1/typeerror_nonetype_object_is_not_subscriptable/
 - create/happen element to a list : https://www.programiz.com/python-programming/list
 - more lists : https://stackoverflow.com/questions/28709345/how-to-append-to-python-list-without-having-to-initialize-the-list/28709401
+
+## settings page - forms
+- form handling basics : https://overiq.com/flask-101/form-handling-in-flask/
+- some help but is using sqlalchemy which is not how I do : https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms
+- pre-populate fields with instances : https://stackoverflow.com/questions/23712986/pre-populate-a-wtforms-in-flask-with-data-from-a-sqlalchemy-object
+- adding data before validating form when POSTing : https://stackoverflow.com/questions/27887548/modify-request-before-validation (careful not to use validate_on_submit() instead of validate())

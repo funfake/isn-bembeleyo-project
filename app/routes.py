@@ -32,7 +32,7 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST']) # compliqué pour faire marcher le système de "déjà connecté, obligé de le faire sur le traitement de la page en jinja"
 def login():
-    form = LoginForm()
+    form = LoginForm(request.form)
     if form.validate_on_submit(): # le form est valide
         # try:
         username = request.form['username']
@@ -69,7 +69,8 @@ def register():
     # update_username(user1, 'lomepal')
     # emp = get_user_by_username('baptiste')
     
-    form = RegistrationForm()
+    form = RegistrationForm(request.form)
+    
     if form.validate_on_submit(): # le form est valide
         #if request.form['password'] == 'password' and request.form['username'] == 'admin': # verif que le mot de passe est le bon
         password = request.form['password'] # on récupère le mot de passe du form pour le traiter
@@ -84,6 +85,7 @@ def register():
             return redirect(url_for('index')) # puis on redirige
         else:
             return redirect(url_for('register'))
+        
     return render_template('register.html', title='S\'inscrire', form=form) # si pas de formulaire envoyé, on l'affiche
 
 
@@ -98,13 +100,12 @@ def settings():
         # can modify the form with form.<NAME>.data
         form.username.data = sel_user.username
         form.birthdate.data = sel_user.birthdate
-        form.email.data = sel_user.email
         form.password.data = sel_user.password
         form.password2.data = sel_user.password
         
         # and validate it then
         if request.method == 'POST' and form.validate():
-            update_names(sel_user, form.first_name.data, form.last_name.data)
+            update_names(sel_user, form.first_name.data, form.last_name.data, form.email.data)
             flash('Informations mises à jour')
                 
         return render_template('settings.html', title='Paramètres', form=form) # si pas de formulaire envoyé, on l'affiche
