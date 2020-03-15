@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Bonjour, {{ user.username }}!</h2>
+    <h2>Bonjour {{ user.username }},</h2>
+    <h3>Voici des personnes nées le même jour que vous avec qui prendre contact</h3>
 
-    {%if logged %}
+    {% if session['logged_in'] %} 
         {% for sel_user in sel_users_list %}
             {% if sel_user != user %}
-            <div><p>{{ sel_user.username }} né le: <b>{{ sel_user.birthdate }}</b></p></div>
+            <div class="card"><p><strong>{{ sel_user.first_name }}</strong> {{ sel_user.last_name }} né le: <strong>{{ sel_user.birthdate }}</strong></p></div>
             {% endif %}
         {% endfor %}
     {% endif %}

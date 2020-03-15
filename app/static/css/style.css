@@ -5,6 +5,7 @@
 
 /* Global */
 body {
+    background-color: #ffffff;
     font-family: 'Roboto Mono', monospace, Arial, Helvetica, sans-serif;
 }
 
@@ -15,6 +16,15 @@ body {
 
 
 /* Content */
-
+.card {
+    display: inline-block;
+    margin: 10px 0px 10px 0px;
+    padding: 10px;
+    border-left: 6px solid #fa983a!important;
+    padding: 0.01em 16px;
+    color: #000!important;
+    background-color: #f8c291!important;
+    max-width: 350px;
+}
 
 /* Footer */

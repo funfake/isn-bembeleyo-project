@@ -13,6 +13,9 @@
   <meta name="description" content="Site pour se rencontrer entre dates de naissances">
   <meta name="author" content="Baptiste et William">
 
+  <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
+
   <link rel="stylesheet" href="../static/css/style.css?v=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
@@ -23,13 +26,16 @@
     <h1>Bembeleyo</h1> 
 
     <a href="{{ url_for('index') }}">Accueil</a>
+    {% if session['logged_in'] %} 
+    <a href="{{ url_for('logout') }}">Se déconnecter</a>
+    {% else %}
     <a href="{{ url_for('login') }}">Se connecter</a>
     <a href="{{ url_for('register') }}">S'inscrire</a>
-    <a href="{{ url_for('logout') }}">Se déconnecter</a>
+    {% endif %}
 		<!-- <a href="messages.html">Contact</a> -->
 		<!-- <a href="send_message.html">Connaissances du jour</a> -->
 		<!-- <a href="liste_compte.html">Contacter + de personnes</a> -->
-		<a href="decouverte.html">Découvrir des villes</a>
+		<!-- <a href="decouverte.html">Découvrir des villes</a> -->
 		<a href="parametre.html">Paramètres</a>
 
     <hr>

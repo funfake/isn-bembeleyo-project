@@ -17,7 +17,7 @@ def index():
     if not session.get('logged_in'):
         user = {'username': 'bel.lle inconnu.e'} # user en POO, valeur par défaut si pas connecté pour pas tout faire crasher
         sel_users = None
-        logged = False
+        # tolog = True
     else:
         username = session.get('username') # on recupere le nom d'uttilisateur encrypté dans la session
         user = User(get_user_by_username(username)[0], get_user_by_username(username)[1], get_user_by_username(username)[2], get_user_by_username(username)[3], get_user_by_username(username)[4], None) # on recupere cet utilisateur en tant qu'objet db
@@ -26,8 +26,8 @@ def index():
         for sel_user in sel_users:
             user = User(get_user_by_username(sel_user[2])[0], get_user_by_username(sel_user[2])[1], get_user_by_username(sel_user[2])[2], get_user_by_username(sel_user[2])[3], get_user_by_username(sel_user[2])[4], None) # on transofrme l'utilisateur issu de la liste (Raw) en objet
             sel_users_list.append(user) # on l'ajoute a la liste
-        logged = True
-    return render_template('index.html', title='Accueil', user=user, sel_users_list=sel_users_list, logged=logged) # on affiche l'accueil
+        # tolog = False
+    return render_template('index.html', title='Accueil', user=user, sel_users_list=sel_users_list) # on affiche l'accueil
 
 
 @app.route('/login', methods=['GET', 'POST']) # compliqué pour faire marcher le système de "déjà connecté, obligé de le faire sur le traitement de la page en jinja"
