@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    
 
     {% if session['logged_in'] %} 
+    
     <h2>Bonjour {{ user.username }},</h2>
-    <h3>Voici des personnes nées le même jour que vous avec qui prendre contact</h3>
+    <h3>Voici des personnes nées le même jour que vous, avec qui vous pouvez prendre contact</h3>
     
         {% for sel_user in sel_users_list %}
             {% if sel_user.email != user.email %}
@@ -15,13 +15,11 @@
 
     {% else %}
 
-    <div class="center">
         <h2>Bonjour {{ user.username }},</h2>
         <h3>Inscrivez-vous, c'est simple et gratuit !<h3>
-        <form action="">
-            <input type="text" placeholder="Entrez votre date de naissance">
+        <form action="{{ url_for('register') }}">
+            <input type="text" name="birthdate" placeholder="Votre date de naissance jj/mm/aaaa" onchange='this.form.submit()'>
         </form>
-    </div>
 
     {% endif %}
 

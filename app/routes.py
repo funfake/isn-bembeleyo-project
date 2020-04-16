@@ -12,7 +12,7 @@ def index():
     
     # cursor.execute("INSERT INTO users VALUES ('Baptiste', 'Dumy', 'baptiste', '16042002', 'contact@baptiste.fr', 'dummy')")
     # cursor.execute("SELECT * FROM users WHERE first_name='William'")
-    # print(cursor.fetchone()) # opposed to fetchmany(max5) or fetchall()
+    # print(cursor.fetchone()) # différent de fetchmany(max5) ou fetchall()
     sel_users_list = [] # on initialise la liste
     
     if not session.get('logged_in'):
@@ -69,6 +69,8 @@ def register():
     # update_username(user1, 'lomepal')
     # emp = get_user_by_username('baptiste')
     
+    bd = request.args.get('birthdate', '') # on récupère la date de naissance passée dans la requete GET, si nulle remplacement par "rien"
+    
     form = RegistrationForm(request.form)
     
     if form.validate_on_submit(): # le form est valide
@@ -86,7 +88,7 @@ def register():
         else:
             return redirect(url_for('register'))
         
-    return render_template('register.html', title='S\'inscrire', form=form) # si pas de formulaire envoyé, on l'affiche
+    return render_template('register.html', title='S\'inscrire', form=form, bd=bd) # si pas de formulaire envoyé, on l'affiche
 
 
 @app.route('/settings', methods=['GET', 'POST']) # compliqué pour faire marcher le système de "déjà connecté, obligé de le faire sur le traitement de la page en jinja"
@@ -95,19 +97,20 @@ def settings():
         username = session.get('username')
         sel_user = User(get_user_by_username(username)[0], get_user_by_username(username)[1], get_user_by_username(username)[2], get_user_by_username(username)[3], get_user_by_username(username)[4], get_user_by_username(username)[5],)
        
+        # on pré-remplis le formulaire avec les données de l'utilisateur
         form = RegistrationForm(obj=sel_user)
         
-        # can modify the form with form.<NAME>.data
+        # on peut modifier le formulaire avec form.<NAME>.data
         form.username.data = sel_user.username
         form.birthdate.data = sel_user.birthdate
         form.password.data = sel_user.password
         form.password2.data = sel_user.password
         
-        # and validate it then
+        # on valide le formulaire
         if request.method == 'POST' and form.validate():
-            update_names(sel_user, form.first_name.data, form.last_name.data, form.email.data)
+            update_names(sel_user, form.first_name.data, form.last_name.data, form.email.data) # fonction définie plus haut permettant d'intéragir avec la bdd
             flash('Informations mises à jour')
                 
-        return render_template('settings.html', title='Paramètres', form=form) # si pas de formulaire envoyé, on l'affiche
+        return render_template('settings.html', title='Paramètres', form=form) # si pas de formulaire envoyé (POST), on l'affiche
     else:
         return redirect(url_for('index'))

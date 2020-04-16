@@ -41,3 +41,8 @@
 - some help but is using sqlalchemy which is not how I do : https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms
 - pre-populate fields with instances : https://stackoverflow.com/questions/23712986/pre-populate-a-wtforms-in-flask-with-data-from-a-sqlalchemy-object
 - adding data before validating form when POSTing : https://stackoverflow.com/questions/27887548/modify-request-before-validation (careful not to use validate_on_submit() instead of validate())
+
+## homepage birthdate form + process in register
+- via render_template > input value : https://www.reddit.com/r/flask/comments/7ipc8p/af_passing_variables_to_a_form_in_flask/
+- get request argument(s) : https://www.programcreek.com/python/example/51530/flask.request.args
+- provide a default value if dict value is Null : https://teamtreehouse.com/community/what-does-requestargsget-return

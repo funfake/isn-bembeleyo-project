@@ -2,18 +2,53 @@
 
 /* Fonts */
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
 
 /* Global */
 body {
     background-color: #ffffff;
     font-family: 'Roboto Mono', monospace, Arial, Helvetica, sans-serif;
+    padding: 1vh;
+}
+
+h3, p, a {
+    font-family: 'Inter', sans-serif;
+}
+
+h1 {
+    font-size: 5vh;
+    margin: 0.3em 0;
+}
+
+h2 {
+    font-size: 3vh;
+}
+
+h3 {
+    font-size: 2.5vh;
+}
+
+p {
+    font-size: 2vh;
+}
+
+a {
+    font-size: 2.5vh;
+    color: #3c6382;
+    text-decoration: none;
 }
 
 /* Header */
 
+/* .title {
+    
+} */
 
 /* Navigation */
 
+.nav-links a {
+    padding: 0 0.7vh;
+}
 
 /* Content */
 
@@ -23,11 +58,24 @@ body {
 }
 
 .center input {
-    min-width: 300px;
-    min-height: 35px;
-    font-size: 17px;
+    min-width: 40vh;
+    min-height: 5vh;
+    font-size: 2vh;
     text-align: center;
-    margin: 5px;
+    /* margin: 10px; */
+    border-radius: 8px;
+}
+
+.center input:last-child {
+    margin-top: 15px;
+    min-height: 6vh;
+    background-color: #f8c291;
+    /* border: solid black 1px; */
+    border: none;
+}
+
+.center h2 {
+    padding-bottom: 15px;
 }
 
 .card {
@@ -39,6 +87,7 @@ body {
     color: #000!important;
     background-color: #f8c291!important;
     max-width: 350px;
+    border-radius: 4px;
 }
 
 /* Footer */

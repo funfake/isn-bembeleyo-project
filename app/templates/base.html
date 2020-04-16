@@ -23,16 +23,18 @@
 
 <body>
     <!-- insert here text -->
-    <h1>Bembeleyo</h1> 
+    <h1 class="title">Bembeleyo</h1> 
 
-    <a href="{{ url_for('index') }}">Accueil</a>
-    {% if session['logged_in'] %} 
-    <a href="{{ url_for('logout') }}">Se déconnecter</a>
-    <a href="{{ url_for('settings') }}">Paramètres</a>
-    {% else %}
-    <a href="{{ url_for('login') }}">Se connecter</a>
-    <a href="{{ url_for('register') }}">S'inscrire</a>
-    {% endif %}
+    <div class="nav-links">
+      <a href="{{ url_for('index') }}">Accueil</a>
+      {% if session['logged_in'] %} 
+      <a href="{{ url_for('logout') }}">Se déconnecter</a>
+      <a href="{{ url_for('settings') }}">Paramètres</a>
+      {% else %}
+      <a href="{{ url_for('login') }}">Se connecter</a>
+      <a href="{{ url_for('register') }}">S'inscrire</a>
+      {% endif %}
+    </div>
 		<!-- <a href="messages.html">Contact</a> -->
 		<!-- <a href="send_message.html">Connaissances du jour</a> -->
 		<!-- <a href="liste_compte.html">Contacter + de personnes</a> -->
@@ -50,7 +52,9 @@
         {% endif %}
         {% endwith %}
 
-    {% block content %}{% endblock %}
+    <div class="center">
+      {% block content %}{% endblock %}
+    </div>
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	<script src="js/scripts.js"></script>

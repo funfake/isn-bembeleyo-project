@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="center">
     {% if session['logged_in'] %} 
 
     Vous êtes déjà connecté !
@@ -29,5 +28,4 @@
     </form>
 
     {% endif %}
-    </div>
 {% endblock %}

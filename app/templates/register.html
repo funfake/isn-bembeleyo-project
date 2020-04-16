@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="center">
     {% if session['logged_in'] %} 
 
     Vous êtes déjà connecté !
@@ -34,7 +33,7 @@
         </p>
         <p>
             {{ form.birthdate.label }}<br>
-            {{ form.birthdate(size=32, id="flatdatepicker") }}<br>
+            {{ form.birthdate(size=32, id="flatdatepicker", value=bd) }}<br>
             {% for error in form.birthdate.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
@@ -64,7 +63,6 @@
     </form>
 
     {% endif %}
-    </div>
 {% endblock %}
 
 {% block scripts %}
